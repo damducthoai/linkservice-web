@@ -1,6 +1,8 @@
 package com.butchjgo.linkservice.common.domain;
 
-public class RequestData {
+import java.io.Serializable;
+
+public class RequestData implements Serializable {
 
     protected String url, password;
 

@@ -1,6 +1,8 @@
 package com.butchjgo.linkservice.common.domain;
 
-public class RequestURLResult {
+import java.io.Serializable;
+
+public class RequestURLResult implements Serializable {
 
     private boolean success = true;
     private String id;

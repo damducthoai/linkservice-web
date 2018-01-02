@@ -1,6 +1,8 @@
 package com.butchjgo.linkservice.common.domain;
 
-public class RequestURL {
+import java.io.Serializable;
+
+public class RequestURL implements Serializable {
 
     private String id, url, password;
     ;
