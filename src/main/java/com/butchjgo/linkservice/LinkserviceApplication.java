@@ -33,7 +33,7 @@ public class LinkserviceApplication {
     public DefaultJmsListenerContainerFactory defaultJmsListenerContainerFactory(ConnectionFactory connectionFactory, DefaultJmsListenerContainerFactoryConfigurer configurer) {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
         configurer.configure(factory, connectionFactory);
-        factory.setPubSubDomain(true);
+        //factory.setPubSubDomain(true);
         return factory;
     }
 }
