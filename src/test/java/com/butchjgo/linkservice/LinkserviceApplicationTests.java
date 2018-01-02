@@ -57,7 +57,7 @@ public class LinkserviceApplicationTests {
         // close resource
         response.close();
         httpClient.close();
-        patternRegister.unregister("Xin chao" + fsharePattern);
+        patternRegister.unregister(fsharePattern);
 
         //evaluate result
         assert response.getStatusLine().getStatusCode() == HttpStatus.CREATED.value();
