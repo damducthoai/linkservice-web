@@ -59,7 +59,7 @@ public class LinkserviceApplicationTests {
         httpClient.close();
         patternRegister.unregister("Xin chao" + fsharePattern);
 
-        //evalue result
+        //evaluate result
         assert response.getStatusLine().getStatusCode() == HttpStatus.CREATED.value();
 
     }

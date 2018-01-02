@@ -17,15 +17,9 @@ public class SupportedURLPool implements Pool<String>, RegisterService<String> {
     }
 
     @Override
-    public boolean isSupported(String url) {
-        boolean status = false;
-        for (String pattern : patternPool) {
-            if (url.matches(pattern)) {
-                status = true;
-                break;
-            }
-        }
-        return status;
+    public boolean isSupported(final String url) {
+
+        return patternPool.stream().anyMatch(p -> url.matches(p));
     }
 
     @Override
