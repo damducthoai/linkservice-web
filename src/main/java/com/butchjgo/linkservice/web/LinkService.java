@@ -5,6 +5,7 @@ import com.butchjgo.linkservice.common.domain.RequestURLResult;
 import com.butchjgo.linkservice.common.exception.BadRequestException;
 import com.butchjgo.linkservice.service.RequestPublisher;
 import com.butchjgo.linkservice.service.UniqueService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,7 +32,7 @@ public class LinkService {
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    RequestURLResult doPost(@Valid @RequestBody RequestURL req, BindingResult result) throws BadRequestException {
+    RequestURLResult doPost(@Valid @RequestBody RequestURL req, BindingResult result) throws BadRequestException, JsonProcessingException {
         if (result.hasErrors()) {
             throw new BadRequestException(result.getAllErrors().toString());
         }
