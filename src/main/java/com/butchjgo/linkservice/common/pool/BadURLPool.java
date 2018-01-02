@@ -10,4 +10,9 @@ public class BadURLPool implements Pool<String> {
         // TODO implement business logic here
         return false;
     }
+
+    @Override
+    public boolean isSupported(String s) {
+        return false;
+    }
 }
