@@ -2,6 +2,7 @@ package com.butchjgo.linkservice.web;
 
 import com.butchjgo.linkservice.common.domain.RequestURL;
 import com.butchjgo.linkservice.common.domain.RequestURLResult;
+import com.butchjgo.linkservice.common.exception.BadRequestException;
 import com.butchjgo.linkservice.service.UniqueService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,9 +21,9 @@ public class LinkService {
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    RequestURLResult doPost(@Valid @RequestBody RequestURL req, BindingResult result) {
+    RequestURLResult doPost(@Valid @RequestBody RequestURL req, BindingResult result) throws BadRequestException {
         if (result.hasErrors()) {
-            //TODO throw errors for Errors handler
+            throw new BadRequestException(result.getAllErrors().toString());
         }
         String id = uniqueService.get();
         // TODO refactoring message instead of hard code
