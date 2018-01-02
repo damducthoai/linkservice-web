@@ -1,24 +1,16 @@
 package com.butchjgo.linkservice.common.domain;
 
-public class RequestURL extends RequestData {
+public class RequestURL {
 
-    private String id;
+    private String id, url, password;
+    ;
 
     public RequestURL() {
-        super();
-    }
-
-    public RequestURL(String url) {
-        super(url);
     }
 
     public RequestURL(String url, String password) {
-        super(url, password);
-    }
-
-    public RequestURL(String url, String password, String id) {
-        super(url, password);
-        this.id = id;
+        this.url = url;
+        this.password = password;
     }
 
     public String getId() {
@@ -29,29 +21,19 @@ public class RequestURL extends RequestData {
         this.id = id;
     }
 
-    @Override
     public String getUrl() {
-        return super.getUrl();
+        return url;
     }
 
-    @Override
     public void setUrl(String url) {
-        super.setUrl(url);
+        this.url = url;
     }
 
-    @Override
     public String getPassword() {
-        return super.getPassword();
+        return password;
     }
 
-    @Override
     public void setPassword(String password) {
-        super.setPassword(password);
+        this.password = password;
     }
-
-    @Override
-    public int hashCode() {
-        return this.id.concat(super.url).concat(super.password).hashCode();
-    }
-
 }
