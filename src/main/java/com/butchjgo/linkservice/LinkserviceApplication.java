@@ -24,13 +24,16 @@ public class LinkserviceApplication {
 
     @Bean
     public JmsTemplate jmsTemplate(ConnectionFactory connectionFactory) {
-        return new JmsTemplate(connectionFactory);
+        JmsTemplate jmsTemplate = new JmsTemplate(connectionFactory);
+        jmsTemplate.setPubSubDomain(true);
+        return jmsTemplate;
     }
 
     @Bean
     public DefaultJmsListenerContainerFactory defaultJmsListenerContainerFactory(ConnectionFactory connectionFactory, DefaultJmsListenerContainerFactoryConfigurer configurer) {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
         configurer.configure(factory, connectionFactory);
+        factory.setPubSubDomain(true);
         return factory;
     }
 }
