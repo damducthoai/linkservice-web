@@ -25,7 +25,6 @@ public class LinkserviceApplication {
     @Bean
     public JmsTemplate jmsTemplate(ConnectionFactory connectionFactory) {
         JmsTemplate jmsTemplate = new JmsTemplate(connectionFactory);
-        jmsTemplate.setPubSubDomain(true);
         return jmsTemplate;
     }
 
@@ -33,7 +32,6 @@ public class LinkserviceApplication {
     public DefaultJmsListenerContainerFactory defaultJmsListenerContainerFactory(ConnectionFactory connectionFactory, DefaultJmsListenerContainerFactoryConfigurer configurer) {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
         configurer.configure(factory, connectionFactory);
-        //factory.setPubSubDomain(true);
         return factory;
     }
 }
