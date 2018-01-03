@@ -1,13 +1,12 @@
 package com.butchjgo.linkservice;
 
+import com.butchjgo.linkservice.common.domain.RegisterInfo;
 import com.butchjgo.linkservice.common.domain.RequestURL;
 import com.butchjgo.linkservice.service.RegisterService;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.json.JSONObject;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,18 +22,33 @@ public class LinkserviceApplicationTests {
 
     private static String serverURL = "http://localhost:8080/";
 
+
     @Resource(name = "supportedURLPool")
-    RegisterService<String> patternRegister;
+    RegisterService<RegisterInfo> patternRegister;
+
+    Util util;
+    RegisterInfo info = new RegisterInfo("fshare.vn", Util.fsharePattern, "fshare");
+
+    @Before
+    public void prepare() {
+        util = new Util();
+        info.setRegistration(true);
+        patternRegister.register(info);
+    }
+
+    @After
+    public void preExit() {
+        info.setRegistration(false);
+        patternRegister.unregister(info);
+    }
+
 
     @Test
     public void testSupportedURL() throws IOException {
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-        HttpPost post = new HttpPost(serverURL + "linkservice");
+
         JSONObject jsonObject = new JSONObject(new RequestURL("test", "test"));
-        StringEntity entity = new StringEntity(jsonObject.toString());
-        post.setEntity(entity);
-        post.addHeader("Content-Type", "application/json");
-        CloseableHttpResponse response = httpClient.execute(post);
+
+        CloseableHttpResponse response = util.postJsonRequest(jsonObject.toString(), Util.serverURLService);
 
         //evaluate result
         assert response.getStatusLine().getStatusCode() == HttpStatus.BAD_REQUEST.value();
@@ -42,22 +56,8 @@ public class LinkserviceApplicationTests {
 
     @Test
     public void testFshare() throws IOException {
-        // init resource
-        final String fsharePattern = "https://www.fshare.vn/file/[a-zA-Z0-9]+";
-        patternRegister.register(fsharePattern);
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-        HttpPost post = new HttpPost(serverURL + "linkservice");
-        JSONObject jsonObject = new JSONObject(new RequestURL("https://www.fshare.vn/file/P3YBDNV9AFYCJF6", "no"));
 
-        StringEntity entity = new StringEntity(jsonObject.toString());
-        post.setEntity(entity);
-        post.addHeader("Content-Type", "application/json");
-        CloseableHttpResponse response = httpClient.execute(post);
-
-        // close resource
-        response.close();
-        httpClient.close();
-        patternRegister.unregister(fsharePattern);
+        CloseableHttpResponse response = util.requestValidFshareURL();
 
         //evaluate result
         assert response.getStatusLine().getStatusCode() == HttpStatus.CREATED.value();

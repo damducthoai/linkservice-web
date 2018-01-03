@@ -1,12 +1,7 @@
 package com.butchjgo.linkservice;
 
 import com.butchjgo.linkservice.common.domain.RegisterInfo;
-import com.butchjgo.linkservice.common.domain.RequestURL;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
@@ -37,8 +32,13 @@ public class TestRegisterService {
     @Autowired
     JmsTemplate jmsTemplate;
 
+    Util util;
+
     @Before
     public void registration() {
+
+        util = new Util();
+
         RegisterInfo info = new RegisterInfo("fshare.vn", "https://www.fshare.vn/file/[a-zA-Z0-9]+", "fshare", true);
         jmsTemplate.send("register", new MessageCreator() {
             @Override
@@ -50,7 +50,7 @@ public class TestRegisterService {
 
     @Test
     public void verifyValid() throws IOException {
-        CloseableHttpResponse response = request();
+        CloseableHttpResponse response = util.requestValidFshareURL();
         assert response.getStatusLine().getStatusCode() == HttpStatus.CREATED.value();
         unregister();
     }
@@ -58,7 +58,7 @@ public class TestRegisterService {
     @Test
     public void verifyInvalid() throws IOException {
         unregister();
-        CloseableHttpResponse response = request();
+        CloseableHttpResponse response = util.requestValidFshareURL();
         int code = response.getStatusLine().getStatusCode();
         assert response.getStatusLine().getStatusCode() == HttpStatus.BAD_REQUEST.value();
         registration();
@@ -75,19 +75,4 @@ public class TestRegisterService {
         });
     }
 
-    private CloseableHttpResponse request() throws IOException {
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-        HttpPost post = new HttpPost(serverURL + "linkservice");
-        JSONObject jsonObject = new JSONObject(new RequestURL("https://www.fshare.vn/file/P3YBDNV9AFYCJF677", "no"));
-
-        StringEntity entity = new StringEntity(jsonObject.toString());
-        post.setEntity(entity);
-        post.addHeader("Content-Type", "application/json");
-        CloseableHttpResponse response = httpClient.execute(post);
-
-        // close resource
-        response.close();
-        httpClient.close();
-        return response;
-    }
 }
