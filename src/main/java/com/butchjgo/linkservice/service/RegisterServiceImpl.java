@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 @Service(value = "registerService")
 public class RegisterServiceImpl implements RegisterService<RegisterInfo> {
     @Resource(name = "supportedURLPool")
-    RegisterService<String> patternRegister;
+    RegisterService<RegisterInfo> patternRegister;
 
     @JmsListener(destination = "${linkservice.jms-register-destination}", containerFactory = "registerJmsListenerContainerFactory")
     void onMessage(RegisterInfo info) {
@@ -23,11 +23,11 @@ public class RegisterServiceImpl implements RegisterService<RegisterInfo> {
 
     @Override
     public void register(RegisterInfo info) {
-        patternRegister.register(info.getPattern());
+        patternRegister.register(info);
     }
 
     @Override
     public void unregister(RegisterInfo info) {
-        patternRegister.unregister(info.getPattern());
+        patternRegister.unregister(info);
     }
 }

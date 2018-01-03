@@ -8,6 +8,8 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.json.JSONObject;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +37,7 @@ public class TestRegisterService {
     @Autowired
     JmsTemplate jmsTemplate;
 
-    @Test
+    @Before
     public void registration() {
         RegisterInfo info = new RegisterInfo("fshare.vn", "https://www.fshare.vn/file/[a-zA-Z0-9]+", "fshare", true);
         jmsTemplate.send("register", new MessageCreator() {
@@ -48,7 +50,6 @@ public class TestRegisterService {
 
     @Test
     public void verifyValid() throws IOException {
-        registration();
         CloseableHttpResponse response = request();
         assert response.getStatusLine().getStatusCode() == HttpStatus.CREATED.value();
         unregister();
@@ -58,10 +59,12 @@ public class TestRegisterService {
     public void verifyInvalid() throws IOException {
         unregister();
         CloseableHttpResponse response = request();
+        int code = response.getStatusLine().getStatusCode();
         assert response.getStatusLine().getStatusCode() == HttpStatus.BAD_REQUEST.value();
+        registration();
     }
 
-    @Test
+    @After
     public void unregister() {
         RegisterInfo info = new RegisterInfo("fshare.vn", "https://www.fshare.vn/file/[a-zA-Z0-9]+", "fshare", false);
         jmsTemplate.send("register", new MessageCreator() {

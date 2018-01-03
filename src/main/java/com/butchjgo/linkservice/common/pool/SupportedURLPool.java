@@ -1,5 +1,6 @@
 package com.butchjgo.linkservice.common.pool;
 
+import com.butchjgo.linkservice.common.domain.RegisterInfo;
 import com.butchjgo.linkservice.common.entity.SupportedPattern;
 import com.butchjgo.linkservice.common.repository.SupportedPatternRepository;
 import com.butchjgo.linkservice.service.RegisterService;
@@ -8,47 +9,48 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service(value = "supportedURLPool")
-public class SupportedURLPool implements Pool<String>, RegisterService<String> {
+public class SupportedURLPool implements Pool<String>, RegisterService<RegisterInfo> {
 
-    final Set<String> patternPool = new HashSet<>();
+    final Map<String, String> patternPool = new HashMap<>();
+
     @Resource(name = "supportedPatternRepository")
     SupportedPatternRepository supportedPatternRepository;
 
     @Override
     public boolean contain(String s) {
-        return patternPool.contains(s);
+        return patternPool.keySet().contains(s);
     }
 
     @Override
     public boolean isSupported(final String url) {
-        return patternPool.stream().anyMatch(p -> url.matches(p));
+        return patternPool.keySet().stream().anyMatch(p -> url.matches(p));
     }
 
     @Override
     @Transactional
-    public void register(String s) {
-        if (!supportedPatternRepository.existsById(s)) {
-            supportedPatternRepository.save(new SupportedPattern(s));
+    public void register(RegisterInfo info) {
+        if (!supportedPatternRepository.existsById(info.getPattern())) {
+            supportedPatternRepository.save(new SupportedPattern(info.getPattern(), info.getChanel()));
         }
-        patternPool.add(s);
+        patternPool.put(info.getPattern(), info.getChanel());
     }
 
     @Override
     @Transactional
-    public void unregister(String s) {
-        if (supportedPatternRepository.existsById(s)) {
-            supportedPatternRepository.deleteById(s);
+    public void unregister(RegisterInfo info) {
+        if (supportedPatternRepository.existsById(info.getPattern())) {
+            supportedPatternRepository.deleteById(info.getPattern());
         }
-        patternPool.remove(s);
+        patternPool.remove(info.getPattern());
     }
 
     @PostConstruct
     @Transactional
     void loadData() {
-        supportedPatternRepository.findAll().stream().peek(p -> patternPool.add(p.getPattern())).close();
+        supportedPatternRepository.findAll().stream().forEach(p -> patternPool.put(p.getPattern(), p.getChanel()));
     }
 }
