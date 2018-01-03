@@ -37,7 +37,7 @@ public class TestRegisterService {
 
     @Test
     public void registration() {
-        RegisterInfo info = new RegisterInfo("fshare.vn", "https://www.fshare.vn/file/[a-zA-Z0-9]+", "fshare");
+        RegisterInfo info = new RegisterInfo("fshare.vn", "https://www.fshare.vn/file/[a-zA-Z0-9]+", "fshare", true);
         jmsTemplate.send("register", new MessageCreator() {
             @Override
             public Message createMessage(Session session) throws JMSException {

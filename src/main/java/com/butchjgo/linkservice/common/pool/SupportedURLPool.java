@@ -31,14 +31,18 @@ public class SupportedURLPool implements Pool<String>, RegisterService<String> {
     @Override
     @Transactional
     public void register(String s) {
-        supportedPatternRepository.save(new SupportedPattern(s));
+        if (!supportedPatternRepository.existsById(s)) {
+            supportedPatternRepository.save(new SupportedPattern(s));
+        }
         patternPool.add(s);
     }
 
     @Override
     @Transactional
     public void unregister(String s) {
-        supportedPatternRepository.deleteById(s);
+        if (supportedPatternRepository.existsById(s)) {
+            supportedPatternRepository.deleteById(s);
+        }
         patternPool.remove(s);
     }
 
