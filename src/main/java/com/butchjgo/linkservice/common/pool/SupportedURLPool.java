@@ -9,13 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.util.HashMap;
 import java.util.Map;
 
 @Service(value = "supportedURLPool")
 public class SupportedURLPool implements Pool<String>, RegisterService<RegisterInfo> {
 
-    final Map<String, String> patternPool = new HashMap<>();
+    @Resource(name = "patternPool")
+    Map<String, String> patternPool;
 
     @Resource(name = "supportedPatternRepository")
     SupportedPatternRepository supportedPatternRepository;

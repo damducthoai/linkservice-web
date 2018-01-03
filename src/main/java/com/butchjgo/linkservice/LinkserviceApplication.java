@@ -20,6 +20,8 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @SpringBootApplication
 @EnableJms
@@ -28,6 +30,11 @@ public class LinkserviceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(LinkserviceApplication.class, args);
 	}
+
+    @Bean
+    public Map<String, String> patternPool() {
+        return new HashMap<>();
+    }
 
     @Bean
     public ActiveMQConnectionFactory connectionFactory() {
