@@ -1,6 +1,6 @@
 package com.butchjgo.linkservice;
 
-import com.butchjgo.linkservice.common.domain.RequestURL;
+import com.butchjgo.linkservice.common.domain.RequestData;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -17,7 +17,7 @@ public class Util {
 
     public CloseableHttpResponse requestValidFshareURL() throws IOException {
         final String URL = serverURL.concat("linkservice");
-        JSONObject jsonObject = new JSONObject(new RequestURL("https://www.fshare.vn/file/P3YBDNV9AFYCJF6", "no"));
+        JSONObject jsonObject = new JSONObject(new RequestData("https://www.fshare.vn/file/P3YBDNV9AFYCJF6", "no"));
         return postJsonRequest(jsonObject.toString(), URL);
     }
 

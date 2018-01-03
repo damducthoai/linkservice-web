@@ -1,7 +1,7 @@
 package com.butchjgo.linkservice;
 
 import com.butchjgo.linkservice.common.domain.RegisterInfo;
-import com.butchjgo.linkservice.common.domain.RequestURL;
+import com.butchjgo.linkservice.common.domain.RequestData;
 import com.butchjgo.linkservice.service.RegisterService;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.json.JSONObject;
@@ -46,7 +46,7 @@ public class LinkserviceApplicationTests {
     @Test
     public void testSupportedURL() throws IOException {
 
-        JSONObject jsonObject = new JSONObject(new RequestURL("test", "test"));
+        JSONObject jsonObject = new JSONObject(new RequestData("test", "test"));
 
         CloseableHttpResponse response = util.postJsonRequest(jsonObject.toString(), Util.serverURLService);
 

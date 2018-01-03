@@ -1,6 +1,6 @@
 package com.butchjgo.linkservice.service;
 
-import com.butchjgo.linkservice.common.domain.RequestURL;
+import com.butchjgo.linkservice.common.domain.RequestData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -19,7 +19,7 @@ import java.util.function.UnaryOperator;
 
 @Service(value = "requestURLPublisher")
 @ConfigurationProperties(prefix = "linkservice")
-public class RequestURLPublisher implements RequestPublisher<RequestURL> {
+public class RequestURLPublisher implements RequestPublisher<RequestData> {
     ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
     @Autowired
@@ -36,7 +36,7 @@ public class RequestURLPublisher implements RequestPublisher<RequestURL> {
             findFirst().orElse(null);
 
     @Override
-    public void publish(RequestURL requestURL) throws JsonProcessingException {
+    public void publish(RequestData requestURL) throws JsonProcessingException {
         String json = objectWriter.writeValueAsString(requestURL);
         //String chanel = getMathChanel(requestURL.getUrl());
         String chanel = getMathChanel.apply(requestURL.getUrl());

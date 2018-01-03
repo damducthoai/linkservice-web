@@ -2,16 +2,16 @@ package com.butchjgo.linkservice.common.domain;
 
 import java.io.Serializable;
 
-public class RequestURLResult implements Serializable {
+public class ResultInfo implements Serializable {
 
     private boolean success = true;
     private String id;
     private String msg;
 
-    public RequestURLResult() {
+    public ResultInfo() {
     }
 
-    public RequestURLResult(String id, String msg) {
+    public ResultInfo(String id, String msg) {
         this.id = id;
         this.msg = msg;
     }

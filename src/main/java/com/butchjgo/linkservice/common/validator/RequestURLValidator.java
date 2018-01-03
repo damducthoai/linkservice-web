@@ -1,6 +1,6 @@
 package com.butchjgo.linkservice.common.validator;
 
-import com.butchjgo.linkservice.common.domain.RequestURL;
+import com.butchjgo.linkservice.common.domain.RequestData;
 import com.butchjgo.linkservice.common.pool.Pool;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,12 +20,12 @@ public class RequestURLValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return RequestURL.class.equals(clazz);
+        return RequestData.class.equals(clazz);
     }
 
     @Override
     public void validate(Object target, Errors errors) {
-        String url = RequestURL.class.cast(target).getUrl();
+        String url = RequestData.class.cast(target).getUrl();
         if (badURLPool.contain(url)) {
             // TODO refactoring message and code
             errors.reject(HttpStatus.BAD_REQUEST.toString(), "bad request url");

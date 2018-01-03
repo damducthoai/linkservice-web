@@ -1,7 +1,7 @@
 package com.butchjgo.linkservice.web;
 
-import com.butchjgo.linkservice.common.domain.RequestURL;
-import com.butchjgo.linkservice.common.domain.RequestURLResult;
+import com.butchjgo.linkservice.common.domain.RequestData;
+import com.butchjgo.linkservice.common.domain.ResultInfo;
 import com.butchjgo.linkservice.common.exception.BadRequestException;
 import com.butchjgo.linkservice.service.RequestPublisher;
 import com.butchjgo.linkservice.service.UniqueService;
@@ -28,11 +28,11 @@ public class LinkService {
     Validator requestURLValidator;
 
     @Resource(name = "requestURLPublisher")
-    RequestPublisher<RequestURL> requestURLPublisher;
+    RequestPublisher<RequestData> requestURLPublisher;
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    RequestURLResult doPost(@Valid @RequestBody RequestURL req, BindingResult result) throws BadRequestException, JsonProcessingException {
+    ResultInfo doPost(@Valid @RequestBody RequestData req, BindingResult result) throws BadRequestException, JsonProcessingException {
         if (result.hasErrors()) {
             throw new BadRequestException(result.getAllErrors().toString());
         }
@@ -40,7 +40,7 @@ public class LinkService {
         req.setId(id);
         requestURLPublisher.publish(req);
         // TODO refactoring message instead of hard code
-        return new RequestURLResult(id, "Request success");
+        return new ResultInfo(id, "Request success");
     }
 
     @InitBinder
