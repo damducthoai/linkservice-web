@@ -2,6 +2,7 @@ package com.butchjgo.linkservice.common.domain;
 
 public class RegisterInfo {
     private String server,pattern,chanel;
+    private boolean registration = true;
 
     public RegisterInfo() {
     }
@@ -10,6 +11,13 @@ public class RegisterInfo {
         this.server = server;
         this.pattern = pattern;
         this.chanel = chanel;
+    }
+
+    public RegisterInfo(String server, String pattern, String chanel, boolean registration) {
+        this.server = server;
+        this.pattern = pattern;
+        this.chanel = chanel;
+        this.registration = registration;
     }
 
     public String getServer() {
@@ -34,6 +42,14 @@ public class RegisterInfo {
 
     public void setChanel(String chanel) {
         this.chanel = chanel;
+    }
+
+    public boolean isRegistration() {
+        return registration;
+    }
+
+    public void setRegistration(boolean registration) {
+        this.registration = registration;
     }
 
     @Override
