@@ -29,7 +29,6 @@ public class TestSupportedURLWithoutContext {
     @Test
     public void testFshare() throws IOException {
         final String fsharePattern = "https://www.fshare.vn/file/[a-zA-Z0-9]+";
-
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpPost post = new HttpPost(serverURL + "linkservice");
 
