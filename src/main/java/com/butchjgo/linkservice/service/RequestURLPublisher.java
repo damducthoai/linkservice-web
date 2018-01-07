@@ -38,7 +38,6 @@ public class RequestURLPublisher implements RequestPublisher<RequestData> {
     @Override
     public void publish(RequestData requestURL) throws JsonProcessingException {
         String json = objectWriter.writeValueAsString(requestURL);
-        //String chanel = getMathChanel(requestURL.getUrl());
         String chanel = getMathChanel.apply(requestURL.getUrl());
 
         if (chanel == null) return;
