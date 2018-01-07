@@ -9,7 +9,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
-import org.springframework.context.annotation.Scope;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
@@ -23,7 +22,7 @@ import javax.validation.Valid;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200"})
+@CrossOrigin
 @RequestMapping(path = "linkservice")
 public class LinkService {
 
@@ -62,7 +61,6 @@ public class LinkService {
         resultInfo.setClientid(req.getClientid());
 
         response.setHeader("Access-Control-Allow-Credentials","true");
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
 
         String finalRes = objectMapper.writeValueAsString(resultInfo);
 
@@ -72,7 +70,6 @@ public class LinkService {
     @RequestMapping(method = RequestMethod.OPTIONS)
     void doOption(HttpServletResponse response) {
         response.addHeader("Access-Control-Allow-Credentials","true");
-        response.addHeader("Access-Control-Allow-Origin", "http://localhost:4200");
         response.addHeader("Access-Control-Allow-Methods","POST, OPTIONS");
     }
 
