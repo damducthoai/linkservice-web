@@ -13,8 +13,8 @@ import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = "http://13.228.29.177")
-@Scope(value = "session")
+@CrossOrigin
+@Scope("session")
 public class IdController {
 
     String clientId;
@@ -28,17 +28,13 @@ public class IdController {
 
     @GetMapping(path = "id")
     String doGet(HttpServletResponse response, HttpSession  session) {
-        response.addHeader("Access-Control-Allow-Credentials","true");
         return session.getId();
     }
 
     @GetMapping(path = "result/{clientId}")
     SseEmitter sseEmitter(@PathVariable String clientId, HttpServletResponse response) {
         SseEmitter emitter = new SseEmitter(60*60*1000L);
-
         emitterPool.put(clientId, emitter);
-        response.addHeader("Access-Control-Allow-Credentials","true");
-
         return emitterPool.get(clientId);
     }
 }

@@ -13,16 +13,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = "http://13.228.29.177/")
+@CrossOrigin
 @RequestMapping(path = "linkservice")
 public class LinkService {
 
@@ -34,9 +32,6 @@ public class LinkService {
 
     @Resource(name = "requestURLPublisher")
     RequestPublisher<RequestData> requestURLPublisher;
-
-    @Resource(name = "emitterPool")
-    Map<String, SseEmitter> emitterPool;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -60,8 +55,6 @@ public class LinkService {
         ResultInfo resultInfo = new ResultInfo(id, "Request success");
         resultInfo.setClientid(req.getClientid());
 
-        response.setHeader("Access-Control-Allow-Credentials","true");
-	response.addHeader("Access-Control-Allow-Origin","http://13.228.29.177");
         String finalRes = objectMapper.writeValueAsString(resultInfo);
 
         return finalRes;
@@ -69,9 +62,6 @@ public class LinkService {
 
     @RequestMapping(method = RequestMethod.OPTIONS)
     void doOption(HttpServletResponse response) {
-	response.addHeader("Access-Control-Allow-Origin","http://13.228.29.177");
-        response.addHeader("Access-Control-Allow-Credentials","true");
-        response.addHeader("Access-Control-Allow-Methods","POST, OPTIONS");
     }
 
     @InitBinder
