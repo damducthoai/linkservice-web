@@ -22,7 +22,7 @@ import javax.validation.Valid;
 import java.util.Map;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @RequestMapping(path = "linkservice")
 public class LinkService {
 
