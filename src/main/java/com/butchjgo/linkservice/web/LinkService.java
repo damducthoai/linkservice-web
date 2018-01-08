@@ -22,7 +22,7 @@ import javax.validation.Valid;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://13.228.29.177/")
 @RequestMapping(path = "linkservice")
 public class LinkService {
 
@@ -61,7 +61,7 @@ public class LinkService {
         resultInfo.setClientid(req.getClientid());
 
         response.setHeader("Access-Control-Allow-Credentials","true");
-
+	response.addHeader("Access-Control-Allow-Origin","http://13.228.29.177");
         String finalRes = objectMapper.writeValueAsString(resultInfo);
 
         return finalRes;
@@ -69,6 +69,7 @@ public class LinkService {
 
     @RequestMapping(method = RequestMethod.OPTIONS)
     void doOption(HttpServletResponse response) {
+	response.addHeader("Access-Control-Allow-Origin","http://13.228.29.177");
         response.addHeader("Access-Control-Allow-Credentials","true");
         response.addHeader("Access-Control-Allow-Methods","POST, OPTIONS");
     }
