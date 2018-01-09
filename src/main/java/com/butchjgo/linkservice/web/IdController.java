@@ -1,5 +1,6 @@
 package com.butchjgo.linkservice.web;
 
+import com.butchjgo.linkservice.service.SseEmitterFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,23 +18,21 @@ import java.util.Map;
 @Scope("session")
 public class IdController {
 
-    String clientId;
+    @Resource(name = "sseEmitterFactory")
+    SseEmitterFactory sseEmitterFactory;
 
     @Resource(name = "emitterPool")
     Map<String, SseEmitter> emitterPool;
 
-    public IdController(HttpSession httpSession) {
-        clientId = httpSession.getId();
-    }
 
     @GetMapping(path = "id")
-    String doGet(HttpServletResponse response, HttpSession  session) {
+    String doGet(HttpSession session) {
         return session.getId();
     }
 
     @GetMapping(path = "result/{clientId}")
     SseEmitter sseEmitter(@PathVariable String clientId, HttpServletResponse response) {
-        SseEmitter emitter = new SseEmitter(60*60*1000L);
+        SseEmitter emitter = sseEmitterFactory.get();
         emitterPool.put(clientId, emitter);
         response.addHeader("Cache-control","no-cache");
         response.addHeader("X-Accel-Buffering","no");
