@@ -35,6 +35,8 @@ public class IdController {
     SseEmitter sseEmitter(@PathVariable String clientId, HttpServletResponse response) {
         SseEmitter emitter = new SseEmitter(60*60*1000L);
         emitterPool.put(clientId, emitter);
+        response.addHeader("Cache-control","no-cache");
+        response.addHeader("X-Accel-Buffering","no");
         return emitterPool.get(clientId);
     }
 }
