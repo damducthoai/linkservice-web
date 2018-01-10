@@ -20,7 +20,6 @@ public class UrlHealthCheckService {
 
     @JmsListener(destination = "${linkservice.jms-healthc-destination}",containerFactory = "healthCheckJmsListenerContainerFactory")
     void onMessage(String url) {
-        System.out.println("da nhan duoc yeu cau kham suc khoe");
         check(url);
     }
 
