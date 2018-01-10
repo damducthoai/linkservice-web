@@ -23,27 +23,11 @@ public class IdController {
     @Resource(name = "emitterPool")
     Map<String, SseEmitter> emitterPool;
 
-
-    @GetMapping(path = "id")
-    String doGet(HttpSession session) {
-        return session.getId();
-    }
-
-    @GetMapping(path = "result/{clientId}")
-    SseEmitter sseEmitter(@PathVariable String clientId, HttpServletResponse response, HttpSession session) {
-        SseEmitter emitter = sseEmitterFactory.get();
-        emitterPool.put(session.getId(), emitter);
-        response.addHeader("Cache-control","no-cache");
-        response.addHeader("X-Accel-Buffering","no");
-        return emitterPool.get(clientId);
-    }
     @GetMapping(path = "result")
-    SseEmitter sseEmitter(HttpServletResponse response, HttpSession session) {
+    SseEmitter sseEmitter(HttpSession session) {
         String sessionId = session.getId();
         SseEmitter emitter = sseEmitterFactory.get();
         emitterPool.put(sessionId, emitter);
-        response.addHeader("Cache-control","no-cache");
-        response.addHeader("X-Accel-Buffering","no");
         return emitter;
     }
 }

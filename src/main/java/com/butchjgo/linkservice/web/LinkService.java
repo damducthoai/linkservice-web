@@ -62,11 +62,6 @@ public class LinkService {
 
         return finalRes;
     }
-
-    @RequestMapping(method = RequestMethod.OPTIONS)
-    void doOption(HttpServletResponse response) {
-    }
-
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
         binder.addValidators(requestURLValidator);
