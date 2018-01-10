@@ -15,7 +15,6 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin
-@Scope("session")
 public class IdController {
 
     @Resource(name = "sseEmitterFactory")
@@ -31,11 +30,20 @@ public class IdController {
     }
 
     @GetMapping(path = "result/{clientId}")
-    SseEmitter sseEmitter(@PathVariable String clientId, HttpServletResponse response) {
+    SseEmitter sseEmitter(@PathVariable String clientId, HttpServletResponse response, HttpSession session) {
         SseEmitter emitter = sseEmitterFactory.get();
-        emitterPool.put(clientId, emitter);
+        emitterPool.put(session.getId(), emitter);
         response.addHeader("Cache-control","no-cache");
         response.addHeader("X-Accel-Buffering","no");
         return emitterPool.get(clientId);
+    }
+    @GetMapping(path = "result")
+    SseEmitter sseEmitter(HttpServletResponse response, HttpSession session) {
+        String sessionId = session.getId();
+        SseEmitter emitter = sseEmitterFactory.get();
+        emitterPool.put(sessionId, emitter);
+        response.addHeader("Cache-control","no-cache");
+        response.addHeader("X-Accel-Buffering","no");
+        return emitter;
     }
 }

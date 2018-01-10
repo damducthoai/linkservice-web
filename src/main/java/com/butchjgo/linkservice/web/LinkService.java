@@ -45,15 +45,18 @@ public class LinkService {
         if (result.hasErrors()) {
             throw new BadRequestException(result.getAllErrors().toString());
         }
+        String clientId = session.getId();
+
         String id = uniqueService.get();
 
         req.setId(id);
-
+        req.setClientid(clientId);
 
         requestURLPublisher.publish(req);
         // TODO refactoring message instead of hard code
         ResultInfo resultInfo = new ResultInfo(id, "Request success");
-        resultInfo.setClientid(req.getClientid());
+
+        resultInfo.setClientid(clientId);
 
         String finalRes = objectMapper.writeValueAsString(resultInfo);
 
