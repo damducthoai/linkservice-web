@@ -74,6 +74,14 @@ public class LinkserviceApplication {
     }
 
     @Bean
+    public DefaultJmsListenerContainerFactory healthCheckJmsListenerContainerFactory(ConnectionFactory connectionFactory,
+                                                                                  DefaultJmsListenerContainerFactoryConfigurer configurer) {
+        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
+        configurer.configure(factory, connectionFactory);
+        return factory;
+    }
+
+    @Bean
     public DefaultJmsListenerContainerFactory resultJmsListenerContainerFactory(ConnectionFactory connectionFactory,
                                                                                 DefaultJmsListenerContainerFactoryConfigurer configurer,
                                                                                 @Qualifier(value = "resultMessageConverter") MessageConverter messageConverter) {

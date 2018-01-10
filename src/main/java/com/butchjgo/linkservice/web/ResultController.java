@@ -15,7 +15,7 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin
-public class IdController {
+public class ResultController {
 
     @Resource(name = "sseEmitterFactory")
     SseEmitterFactory sseEmitterFactory;

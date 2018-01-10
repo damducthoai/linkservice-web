@@ -22,7 +22,7 @@ import javax.validation.Valid;
 @RestController
 @CrossOrigin
 @RequestMapping(path = "linkservice")
-public class LinkService {
+public class RequestController {
 
     @Resource(name = "uniqueService")
     UniqueService uniqueService;

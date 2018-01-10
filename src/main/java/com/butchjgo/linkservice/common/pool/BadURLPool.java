@@ -1,5 +1,6 @@
 package com.butchjgo.linkservice.common.pool;
 
+import com.butchjgo.linkservice.common.entity.BadURL;
 import com.butchjgo.linkservice.common.repository.BadURLRepository;
 import org.springframework.stereotype.Service;
 
