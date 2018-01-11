@@ -1,5 +1,6 @@
 package com.butchjgo.linkservice;
 
+import com.butchjgo.linkservice.common.domain.AccountInfo;
 import com.butchjgo.linkservice.common.domain.RegisterInfo;
 import com.butchjgo.linkservice.common.domain.ResultData;
 import com.butchjgo.linkservice.service.UniqueService;
@@ -30,6 +31,8 @@ import javax.jms.Message;
 import javax.jms.Session;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -179,5 +182,12 @@ public class LinkserviceApplication {
                         .allowCredentials(true);
             }
         };
+    }
+
+    @Bean("accountPool")
+    public Map<String, LinkedList<AccountInfo>> accountInfoMap() {
+
+        Map<String, LinkedList<AccountInfo>> map = new HashMap<>();
+        return map;
     }
 }
