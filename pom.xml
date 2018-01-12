@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.butchjgo</groupId>
-	<artifactId>linkservice</artifactId>
+	<artifactId>linkservice-web</artifactId>
 	<version>1.0</version>
 	<packaging>jar</packaging>
 
-	<name>linkservice</name>
+	<name>linkservice-web</name>
 	<description>this project help user get premium download url without premium account</description>
 
 	<parent>
@@ -22,6 +22,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>9</java.version>
+		<maven.compiler.source>1.9</maven.compiler.source>
+		<maven.compiler.target>1.9</maven.compiler.target>
 	</properties>
 
 	<dependencies>
@@ -158,6 +160,19 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
+	
+	<dependencyManagement>
+		<dependencies>
+			<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>2.0.0.M7</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 
 </project>
