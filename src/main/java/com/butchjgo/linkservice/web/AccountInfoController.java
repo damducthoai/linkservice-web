@@ -1,9 +1,9 @@
 package com.butchjgo.linkservice.web;
 
 import com.butchjgo.linkservice.common.domain.AccountInfo;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.butchjgo.linkservice.common.repository.AccountRepository;
+import com.butchjgo.linkservice.common.service.AccountService;
 import javassist.NotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.http.HttpStatus;
@@ -12,41 +12,42 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.io.File;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
-@RestController
+@RestController("accountController")
 @RequestMapping(path = "accounts")
 @Validated
-public class AccountInfoController {
+public class AccountInfoController implements AccountService {
 
     @Value("${linkservice.account.token}")
     String token;
 
-    @Value("${account.info.file}")
-    private String accountFile;
-    @Value("${HOME_DIR}")
-    private String homeDir;
-
-    @Autowired
-    ObjectMapper objectMapper;
-
     @Resource(name = "accountPool")
     Map<String, LinkedList<AccountInfo>> accountsPool;
 
+    @Resource(name = "accountRepository")
+    AccountRepository accountRepository;
+
+
+    @GetMapping(headers = "token")
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<AccountInfo> getAllAccount(@NotNull @RequestHeader("token") String requestToken) {
+        List<AccountInfo> list = null;
+        if (requestToken.equals(token)) list = accountRepository.findAll();
+        return list;
+    }
+
     @GetMapping(headers = "token", params = "server")
     @ResponseStatus(value = HttpStatus.OK)
-    AccountInfo accountInfo(@NotNull @RequestHeader("token") String requestToken,
-                            @NotNull @RequestParam(name = "server") String server) throws NotFoundException {
+    public AccountInfo doGetAccount(@NotNull @RequestHeader("token") String requestToken,
+                                    @NotNull @RequestParam(name = "server") String server) throws NotFoundException {
         AccountInfo info = new AccountInfo();
+
         if (requestToken.equals(token) && accountsPool.containsKey(server)) {
             LinkedList<AccountInfo> accounts = accountsPool.get(server);
             synchronized (accounts) {
@@ -66,7 +67,7 @@ public class AccountInfoController {
     void doAddAccount(@NotNull @RequestHeader("token") String requestToken,
                       @Valid @NotNull @RequestBody AccountInfo account) {
         String server = account.getServer();
-
+        accountRepository.save(account);
         if (accountsPool.containsKey(server)) {
             LinkedList<AccountInfo> accounts = accountsPool.get(server);
             if (accounts.stream().anyMatch(a -> a.equals(account))) {
@@ -80,7 +81,6 @@ public class AccountInfoController {
                 addLast(account);
             }});
         }
-        saveData();
     }
 
     @DeleteMapping(headers = "token")
@@ -88,6 +88,9 @@ public class AccountInfoController {
     void doDeleteAccount(@NotNull @RequestHeader("token") String requestToken,
                          @Valid @NotNull @RequestBody AccountInfo account) {
         String server = account.getServer();
+
+        accountRepository.delete(account);
+
         if (accountsPool.containsKey(server)) {
             LinkedList<AccountInfo> accounts = accountsPool.get(server);
 
@@ -96,7 +99,6 @@ public class AccountInfoController {
                     accounts.remove(account);
                 }
             }
-            saveData();
         }
     }
 
@@ -107,30 +109,26 @@ public class AccountInfoController {
 
     @PostConstruct
     void loadData() {
-
         try {
-            File file = new File(homeDir.concat(accountFile));
-            if (file.exists()) {
-                Map<String,List> data = objectMapper.readValue(file, HashMap.class);
-                accountsPool.clear();
-                data.forEach((k,v)->{
-                    final LinkedList<AccountInfo> accounts = new LinkedList<>();
-                    System.out.println(v);
-                    accountsPool.put(k, accounts);
-                });
-            }
+            List<AccountInfo> infoList = accountRepository.findAll();
+            accountsPool.clear();
+            infoList.forEach(account -> {
+                if (!accountsPool.containsKey(account.getServer())) {
+                    accountsPool.put(account.getServer(), new LinkedList<>() {{
+                        addLast(account);
+                    }});
+                } else {
+                    LinkedList list = accountsPool.get(account.getServer());
+                    list.addLast(account);
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    @PreDestroy
-    void saveData() {
-        try {
-            File file = new File(homeDir.concat(accountFile));
-            objectMapper.writeValue(file, accountsPool);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    @Override
+    public AccountInfo getAccount(String requestToken, String server) throws NotFoundException {
+        return doGetAccount(requestToken, server);
     }
 }

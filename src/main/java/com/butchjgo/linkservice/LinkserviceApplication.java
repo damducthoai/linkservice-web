@@ -3,7 +3,9 @@ package com.butchjgo.linkservice;
 import com.butchjgo.linkservice.common.domain.AccountInfo;
 import com.butchjgo.linkservice.common.domain.RegisterInfo;
 import com.butchjgo.linkservice.common.domain.ResultData;
+import com.butchjgo.linkservice.common.service.AccountService;
 import com.butchjgo.linkservice.service.UniqueService;
+import com.butchjgo.linkservice.web.AccountInfoController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQTextMessage;
@@ -19,6 +21,8 @@ import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.converter.MessageConversionException;
 import org.springframework.jms.support.converter.MessageConverter;
+import org.springframework.remoting.caucho.HessianServiceExporter;
+import org.springframework.remoting.support.RemoteExporter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -31,7 +35,6 @@ import javax.jms.Message;
 import javax.jms.Session;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -186,8 +189,16 @@ public class LinkserviceApplication {
 
     @Bean("accountPool")
     public Map<String, LinkedList<AccountInfo>> accountInfoMap() {
-
         Map<String, LinkedList<AccountInfo>> map = new HashMap<>();
         return map;
     }
+
+    @Bean(name = "/accountx")
+    RemoteExporter accountx(AccountInfoController accountInfoController) {
+        HessianServiceExporter exporter = new HessianServiceExporter();
+        exporter.setService(accountInfoController);
+        exporter.setServiceInterface(AccountService.class);
+        return exporter;
+    }
+
 }
