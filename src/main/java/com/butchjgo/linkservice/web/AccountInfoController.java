@@ -46,19 +46,17 @@ public class AccountInfoController implements AccountService {
     @ResponseStatus(value = HttpStatus.OK)
     public AccountInfo doGetAccount(@NotNull @RequestHeader("token") String requestToken,
                                     @NotNull @RequestParam(name = "server") String server) throws NotFoundException {
-        AccountInfo info = new AccountInfo();
-
-        if (requestToken.equals(token) && accountsPool.containsKey(server)) {
-            LinkedList<AccountInfo> accounts = accountsPool.get(server);
-            synchronized (accounts) {
-                info = accounts.pollFirst();
-                if (info != null) {
-                    accounts.addLast(info);
-                } else throw new NotFoundException("account not found", new Exception());
-            }
-        } else {
+        AccountInfo info = null;
+        if (!requestToken.equals(token) && !accountsPool.containsKey(server))
             throw new NotFoundException("account not found", new Exception());
+
+        LinkedList<AccountInfo> accounts = accountsPool.get(server);
+
+        synchronized (accounts) {
+            info = accounts.pollFirst();
+            if (info!= null) accounts.addLast(info);
         }
+
         return info;
     }
 

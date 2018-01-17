@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository(value = "badURLRepository")
 public interface BadURLRepository extends JpaRepository<BadURL, String> {
-
 }
