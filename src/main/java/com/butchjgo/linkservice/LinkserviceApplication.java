@@ -3,7 +3,6 @@ package com.butchjgo.linkservice;
 import com.butchjgo.linkservice.common.domain.AccountInfo;
 import com.butchjgo.linkservice.common.domain.RegisterInfo;
 import com.butchjgo.linkservice.common.domain.ResultData;
-import com.butchjgo.linkservice.common.entity.SupportedPattern;
 import com.butchjgo.linkservice.common.service.AccountService;
 import com.butchjgo.linkservice.service.UniqueService;
 import com.butchjgo.linkservice.web.AccountInfoController;
@@ -40,7 +39,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.regex.Pattern;
 
 @SpringBootApplication
 @EnableJms
