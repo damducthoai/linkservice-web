@@ -26,12 +26,13 @@ public class RequestURLValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        String url = RequestData.class.cast(target).getUrl();
+        RequestData req = RequestData.class.cast(target);
+        String url = req.getUrl();
         if (badURLRepository.findById(url).isPresent()) {
             // TODO refactoring message and code
             errors.reject(HttpStatus.BAD_REQUEST.toString(), "bad request url");
         }
-        if (!supportedURLPool.isSupported(url)) {
+        if (!supportedURLPool.isSupported(req)) {
             errors.reject(HttpStatus.UNPROCESSABLE_ENTITY.toString(), "url does not supported");
         }
     }

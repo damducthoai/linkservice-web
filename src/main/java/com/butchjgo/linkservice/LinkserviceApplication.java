@@ -53,11 +53,6 @@ public class LinkserviceApplication {
     }
 
     @Bean
-    public Map<String, String> patternPool() {
-        return new HashMap<>();
-    }
-
-    @Bean
     public ActiveMQConnectionFactory connectionFactory() {
         return new ActiveMQConnectionFactory();
     }
@@ -205,11 +200,4 @@ public class LinkserviceApplication {
         exporter.setServiceInterface(AccountService.class);
         return exporter;
     }
-
-   /* @Bean
-    Map<Pattern, SupportedPattern> patternPoolxx() {
-        Pattern pattern = Pattern.compile("xx");
-        return new HashMap<>();
-    }*/
-
 }
