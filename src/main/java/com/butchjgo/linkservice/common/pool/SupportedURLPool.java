@@ -9,25 +9,26 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service(value = "supportedURLPool")
 public class SupportedURLPool implements Pool<String>, RegisterService<RegisterInfo> {
 
-    @Resource(name = "patternPool")
-    Map<String, String> patternPool;
+    Set<SupportedPattern> registedInfo = new HashSet<>();
 
     @Resource(name = "supportedPatternRepository")
     SupportedPatternRepository supportedPatternRepository;
 
     @Override
     public boolean contain(String s) {
-        return patternPool.keySet().contains(s);
+        // TODO - do refactoring
+        return false;
     }
 
     @Override
     public boolean isSupported(final String url) {
-        return patternPool.keySet().stream().anyMatch(p -> url.matches(p));
+        return registedInfo.stream().anyMatch(info -> info.getCompiledPattern().matcher(url).matches());
     }
 
     @Override
@@ -36,7 +37,7 @@ public class SupportedURLPool implements Pool<String>, RegisterService<RegisterI
         if (!supportedPatternRepository.existsById(info.getPattern())) {
             supportedPatternRepository.save(new SupportedPattern(info.getPattern(), info.getChanel()));
         }
-        patternPool.put(info.getPattern(), info.getChanel());
+        registedInfo.add(new SupportedPattern(info.getPattern(), info.getChanel()));
     }
 
     @Override
@@ -45,12 +46,12 @@ public class SupportedURLPool implements Pool<String>, RegisterService<RegisterI
         if (supportedPatternRepository.existsById(info.getPattern())) {
             supportedPatternRepository.deleteById(info.getPattern());
         }
-        patternPool.remove(info.getPattern());
+        registedInfo.removeIf(item -> item.getPattern().equals(info.getPattern()));
     }
 
     @PostConstruct
     @Transactional
     void loadData() {
-        supportedPatternRepository.findAll().stream().forEach(p -> patternPool.put(p.getPattern(), p.getChanel()));
+        supportedPatternRepository.findAll().stream().forEach(p -> registedInfo.add(new SupportedPattern(p.getPattern(), p.getChanel())));
     }
 }

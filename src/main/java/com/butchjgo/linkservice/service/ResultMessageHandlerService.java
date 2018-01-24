@@ -13,7 +13,6 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalTime;
 import java.util.Date;
 import java.util.Map;
 import java.util.TimeZone;
@@ -42,12 +41,12 @@ public class ResultMessageHandlerService {
         sdfDate.setTimeZone(tz);
     }
 
-    @JmsListener(destination = "result",containerFactory = "resultJmsListenerContainerFactory")
+    @JmsListener(destination = "result", containerFactory = "resultJmsListenerContainerFactory")
     void onMessage(ResultData rs) throws IOException {
 
         rs.setTime(new Date().toString());
 
-        System.out.println(String.format("received: %s",rs.getResult()));
+        System.out.println(String.format("received: %s", rs.getResult()));
         String id = rs.getClientid();
 
         resultPool.put(id, rs.getResult());

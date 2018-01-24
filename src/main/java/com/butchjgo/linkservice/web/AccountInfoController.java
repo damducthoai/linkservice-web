@@ -36,7 +36,7 @@ public class AccountInfoController implements AccountService {
 
     @GetMapping(headers = "token")
     @ResponseStatus(value = HttpStatus.OK)
-    public List<AccountInfo> getAllAccount(@NotNull @RequestHeader("token") String requestToken) {
+    public List<AccountInfo> doGetAllAccount(@NotNull @RequestHeader("token") String requestToken) {
         List<AccountInfo> list = null;
         if (requestToken.equals(token)) list = accountRepository.findAll();
         return list;
@@ -54,7 +54,7 @@ public class AccountInfoController implements AccountService {
 
         synchronized (accounts) {
             info = accounts.pollFirst();
-            if (info!= null) accounts.addLast(info);
+            if (info != null) accounts.addLast(info);
         }
 
         return info;

@@ -1,7 +1,8 @@
 package com.butchjgo.linkservice.common.validator;
 
 import com.butchjgo.linkservice.common.domain.RequestData;
-import com.butchjgo.linkservice.common.pool.Pool;
+import com.butchjgo.linkservice.common.pool.SupportedURLPool;
+import com.butchjgo.linkservice.common.repository.BadURLRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
@@ -12,11 +13,11 @@ import javax.annotation.Resource;
 @Service(value = "requestURLValidator")
 public class RequestURLValidator implements Validator {
 
-    @Resource(name = "badURLPool")
-    Pool<String> badURLPool;
+    @Resource(name = "badURLRepository")
+    BadURLRepository badURLRepository;
 
     @Resource(name = "supportedURLPool")
-    Pool<String> supportedURLPool;
+    SupportedURLPool supportedURLPool;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -26,7 +27,7 @@ public class RequestURLValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         String url = RequestData.class.cast(target).getUrl();
-        if (badURLPool.contain(url)) {
+        if (badURLRepository.findById(url).isPresent()) {
             // TODO refactoring message and code
             errors.reject(HttpStatus.BAD_REQUEST.toString(), "bad request url");
         }

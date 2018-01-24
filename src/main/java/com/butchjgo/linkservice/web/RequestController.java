@@ -38,9 +38,9 @@ public class RequestController {
 
     @PostMapping
     String doPost(@Valid @RequestBody RequestData req,
-                          BindingResult result,
-                          HttpSession session,
-                          HttpServletResponse response)
+                  BindingResult result,
+                  HttpSession session,
+                  HttpServletResponse response)
             throws BadRequestException, JsonProcessingException {
         if (result.hasErrors()) {
             throw new BadRequestException(result.getAllErrors().toString());
@@ -62,6 +62,7 @@ public class RequestController {
 
         return finalRes;
     }
+
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
         binder.addValidators(requestURLValidator);

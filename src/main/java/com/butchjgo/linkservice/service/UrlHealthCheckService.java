@@ -2,7 +2,6 @@ package com.butchjgo.linkservice.service;
 
 import com.butchjgo.linkservice.common.entity.BadURL;
 import com.butchjgo.linkservice.common.repository.BadURLRepository;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jms.annotation.JmsListener;
@@ -18,7 +17,7 @@ public class UrlHealthCheckService {
 
     RestTemplate restTemplate = new RestTemplate();
 
-    @JmsListener(destination = "${linkservice.jms-healthc-destination}",containerFactory = "healthCheckJmsListenerContainerFactory")
+    @JmsListener(destination = "${linkservice.jms-healthc-destination}", containerFactory = "healthCheckJmsListenerContainerFactory")
     void onMessage(String url) {
         check(url);
     }

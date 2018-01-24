@@ -3,6 +3,7 @@ package com.butchjgo.linkservice;
 import com.butchjgo.linkservice.common.domain.AccountInfo;
 import com.butchjgo.linkservice.common.domain.RegisterInfo;
 import com.butchjgo.linkservice.common.domain.ResultData;
+import com.butchjgo.linkservice.common.entity.SupportedPattern;
 import com.butchjgo.linkservice.common.service.AccountService;
 import com.butchjgo.linkservice.service.UniqueService;
 import com.butchjgo.linkservice.web.AccountInfoController;
@@ -15,6 +16,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
@@ -38,15 +40,17 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 
 @SpringBootApplication
 @EnableJms
 @EnableWebMvc
+@EnableAspectJAutoProxy
 public class LinkserviceApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(LinkserviceApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(LinkserviceApplication.class, args);
+    }
 
     @Bean
     public Map<String, String> patternPool() {
@@ -68,6 +72,7 @@ public class LinkserviceApplication {
         JmsTemplate jmsTemplate = new JmsTemplate(connectionFactory);
         return jmsTemplate;
     }
+
     @Bean
     public DefaultJmsListenerContainerFactory registerJmsListenerContainerFactory(ConnectionFactory connectionFactory,
                                                                                   DefaultJmsListenerContainerFactoryConfigurer configurer,
@@ -81,7 +86,7 @@ public class LinkserviceApplication {
 
     @Bean
     public DefaultJmsListenerContainerFactory healthCheckJmsListenerContainerFactory(ConnectionFactory connectionFactory,
-                                                                                  DefaultJmsListenerContainerFactoryConfigurer configurer) {
+                                                                                     DefaultJmsListenerContainerFactoryConfigurer configurer) {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
         configurer.configure(factory, connectionFactory);
         return factory;
@@ -167,7 +172,7 @@ public class LinkserviceApplication {
     @Bean
     @Scope(value = "session")
     public String clientId(@Qualifier(value = "uniqueService") UniqueService uniqueService) {
-	    return uniqueService.get();
+        return uniqueService.get();
     }
 
     @Bean
@@ -200,5 +205,11 @@ public class LinkserviceApplication {
         exporter.setServiceInterface(AccountService.class);
         return exporter;
     }
+
+   /* @Bean
+    Map<Pattern, SupportedPattern> patternPoolxx() {
+        Pattern pattern = Pattern.compile("xx");
+        return new HashMap<>();
+    }*/
 
 }
