@@ -4,6 +4,7 @@ import com.butchjgo.linkservice.common.domain.AccountInfo;
 import com.butchjgo.linkservice.common.domain.RegisterInfo;
 import com.butchjgo.linkservice.common.domain.ResultData;
 import com.butchjgo.linkservice.common.service.AccountService;
+import com.butchjgo.linkservice.repository.AccountInfoController;
 import com.butchjgo.linkservice.repository.AccountRepository;
 import com.butchjgo.linkservice.repository.BadURLRepository;
 import com.butchjgo.linkservice.repository.SupportedPatternRepository;
@@ -194,20 +195,6 @@ public class LinkserviceApplication {
                         .allowCredentials(true);
             }
         };
-    }
-
-    @Bean("accountPool")
-    public Map<String, LinkedList<AccountInfo>> accountInfoMap() {
-        Map<String, LinkedList<AccountInfo>> map = new HashMap<>();
-        return map;
-    }
-
-    @Bean(name = "/accountx")
-    RemoteExporter accountx(AccountInfoController accountInfoController) {
-        HessianServiceExporter exporter = new HessianServiceExporter();
-        exporter.setService(accountInfoController);
-        exporter.setServiceInterface(AccountService.class);
-        return exporter;
     }
 
     @Bean
