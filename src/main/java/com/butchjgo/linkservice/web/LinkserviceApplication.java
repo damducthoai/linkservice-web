@@ -1,11 +1,13 @@
-package com.butchjgo.linkservice;
+package com.butchjgo.linkservice.web;
 
 import com.butchjgo.linkservice.common.domain.AccountInfo;
 import com.butchjgo.linkservice.common.domain.RegisterInfo;
 import com.butchjgo.linkservice.common.domain.ResultData;
 import com.butchjgo.linkservice.common.service.AccountService;
-import com.butchjgo.linkservice.service.UniqueService;
-import com.butchjgo.linkservice.web.AccountInfoController;
+import com.butchjgo.linkservice.repository.AccountRepository;
+import com.butchjgo.linkservice.repository.BadURLRepository;
+import com.butchjgo.linkservice.repository.SupportedPatternRepository;
+import com.butchjgo.linkservice.web.service.UniqueService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQTextMessage;
@@ -13,7 +15,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Scope;
@@ -22,6 +27,7 @@ import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.converter.MessageConversionException;
 import org.springframework.jms.support.converter.MessageConverter;
+import org.springframework.remoting.caucho.HessianProxyFactoryBean;
 import org.springframework.remoting.caucho.HessianServiceExporter;
 import org.springframework.remoting.support.RemoteExporter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -40,11 +46,16 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class,
+        HibernateJpaAutoConfiguration.class},scanBasePackages = {"com.butchjgo.linkservice.web"})
 @EnableJms
 @EnableWebMvc
 @EnableAspectJAutoProxy
+
 public class LinkserviceApplication {
+
+    @Value("${repository.endpoint}")
+    String repositoryEndpoint;
 
     public static void main(String[] args) {
         SpringApplication.run(LinkserviceApplication.class, args);
@@ -197,5 +208,29 @@ public class LinkserviceApplication {
         exporter.setService(accountInfoController);
         exporter.setServiceInterface(AccountService.class);
         return exporter;
+    }
+
+    @Bean
+    HessianProxyFactoryBean accountRepository(@Value("${repository.account}") String accountEndpoint) {
+        HessianProxyFactoryBean invoker = new HessianProxyFactoryBean();
+        invoker.setServiceUrl(repositoryEndpoint.concat(accountEndpoint));
+        invoker.setServiceInterface(AccountRepository.class);
+        return invoker;
+    }
+
+    @Bean
+    HessianProxyFactoryBean supportedPatternRepository(@Value("${repository.supported.pattern}") String patternEndpoint) {
+        HessianProxyFactoryBean invoker = new HessianProxyFactoryBean();
+        invoker.setServiceUrl(repositoryEndpoint.concat(patternEndpoint));
+        invoker.setServiceInterface(SupportedPatternRepository.class);
+        return invoker;
+    }
+
+    @Bean
+    HessianProxyFactoryBean badURLRepository(@Value("${repository.badurl}") String badUrlEndpoint) {
+        HessianProxyFactoryBean invoker = new HessianProxyFactoryBean();
+        invoker.setServiceUrl(repositoryEndpoint.concat(badUrlEndpoint));
+        invoker.setServiceInterface(BadURLRepository.class);
+        return invoker;
     }
 }

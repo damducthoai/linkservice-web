@@ -1,4 +1,4 @@
-package com.butchjgo.linkservice.common.pool;
+package com.butchjgo.linkservice.web.pool;
 
 public interface Pool<T> {
     boolean contain(T t);

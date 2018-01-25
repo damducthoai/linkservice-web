@@ -1,4 +1,4 @@
-package com.butchjgo.linkservice.service;
+package com.butchjgo.linkservice.web.service;
 
 import com.butchjgo.linkservice.common.domain.RequestData;
 import com.fasterxml.jackson.core.JsonProcessingException;

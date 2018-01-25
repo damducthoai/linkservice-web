@@ -1,8 +1,8 @@
 package com.butchjgo.linkservice.web;
 
 import com.butchjgo.linkservice.common.domain.AccountInfo;
-import com.butchjgo.linkservice.common.repository.AccountRepository;
 import com.butchjgo.linkservice.common.service.AccountService;
+import com.butchjgo.linkservice.repository.AccountRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;

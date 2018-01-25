@@ -1,7 +1,7 @@
 package com.butchjgo.linkservice;
 
 import com.butchjgo.linkservice.common.entity.BadURL;
-import com.butchjgo.linkservice.common.repository.BadURLRepository;
+import com.butchjgo.linkservice.repository.BadURLRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

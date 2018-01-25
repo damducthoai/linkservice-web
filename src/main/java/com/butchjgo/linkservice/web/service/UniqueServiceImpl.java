@@ -1,4 +1,4 @@
-package com.butchjgo.linkservice.service;
+package com.butchjgo.linkservice.web.service;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;

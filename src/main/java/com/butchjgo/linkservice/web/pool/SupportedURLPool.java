@@ -1,10 +1,10 @@
-package com.butchjgo.linkservice.common.pool;
+package com.butchjgo.linkservice.web.pool;
 
 import com.butchjgo.linkservice.common.domain.RegisterInfo;
 import com.butchjgo.linkservice.common.domain.RequestData;
 import com.butchjgo.linkservice.common.entity.SupportedPattern;
-import com.butchjgo.linkservice.common.repository.SupportedPatternRepository;
-import com.butchjgo.linkservice.service.RegisterService;
+import com.butchjgo.linkservice.repository.SupportedPatternRepository;
+import com.butchjgo.linkservice.web.service.RegisterService;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

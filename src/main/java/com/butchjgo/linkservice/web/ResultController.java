@@ -1,6 +1,6 @@
 package com.butchjgo.linkservice.web;
 
-import com.butchjgo.linkservice.service.SseEmitterFactory;
+import com.butchjgo.linkservice.web.service.SseEmitterFactory;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

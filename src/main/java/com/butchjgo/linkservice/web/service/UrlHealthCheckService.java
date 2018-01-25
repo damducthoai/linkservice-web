@@ -1,7 +1,7 @@
-package com.butchjgo.linkservice.service;
+package com.butchjgo.linkservice.web.service;
 
 import com.butchjgo.linkservice.common.entity.BadURL;
-import com.butchjgo.linkservice.common.repository.BadURLRepository;
+import com.butchjgo.linkservice.repository.BadURLRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jms.annotation.JmsListener;

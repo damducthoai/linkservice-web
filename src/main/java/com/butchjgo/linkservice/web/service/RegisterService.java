@@ -1,4 +1,4 @@
-package com.butchjgo.linkservice.service;
+package com.butchjgo.linkservice.web.service;
 
 public interface RegisterService<T> {
     void register(T t);

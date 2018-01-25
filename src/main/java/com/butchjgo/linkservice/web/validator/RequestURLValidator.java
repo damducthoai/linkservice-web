@@ -1,8 +1,8 @@
-package com.butchjgo.linkservice.common.validator;
+package com.butchjgo.linkservice.web.validator;
 
 import com.butchjgo.linkservice.common.domain.RequestData;
-import com.butchjgo.linkservice.common.pool.SupportedURLPool;
-import com.butchjgo.linkservice.common.repository.BadURLRepository;
+import com.butchjgo.linkservice.repository.BadURLRepository;
+import com.butchjgo.linkservice.web.pool.SupportedURLPool;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;

@@ -1,4 +1,4 @@
-package com.butchjgo.linkservice.service;
+package com.butchjgo.linkservice.web.service;
 
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 

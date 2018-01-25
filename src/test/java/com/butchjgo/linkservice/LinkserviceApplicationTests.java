@@ -2,7 +2,7 @@ package com.butchjgo.linkservice;
 
 import com.butchjgo.linkservice.common.domain.RegisterInfo;
 import com.butchjgo.linkservice.common.domain.RequestData;
-import com.butchjgo.linkservice.service.RegisterService;
+import com.butchjgo.linkservice.web.service.RegisterService;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.json.JSONObject;
 import org.junit.After;
